@@ -1,0 +1,299 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D7CCB8E3-089E-4F8D-AB45-BBB238F78194}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Com.Enterprisecoding.RobosapienKinect</RootNamespace>
+    <AssemblyName>RobosapienKinect</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <Utf8Output>true</Utf8Output>
+    <ExpressionBlendVersion>4.0.30816.0</ExpressionBlendVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\RobosapienKinect.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\RobosapienKinect.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Kinect, Version=1.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Microsoft SDKs\Kinect\v1.5\Assemblies\Microsoft.Kinect.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Speech, Version=11.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="ArmStatus.cs" />
+    <Compile Include="ArmStatusEventArgs.cs" />
+    <Compile Include="EnergyCalculatingPassThroughStream.cs" />
+    <Compile Include="GestureCommands\Angles.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\GestureCommandBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\KinectVectorExtensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\LeanBackwardCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\LeanForwardCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\LeftArmCenterCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\LeftArmDownCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\LeftArmInCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\LeftArmMiddleCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\LeftArmOutCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\LeftArmUpCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\LeftHandPickUpCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\RightArmCenterCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\RightArmDownCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\RightArmInCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\RightArmMiddleCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\RightArmOutCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\RightArmUpCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\RightHandPickUpCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\TiltBodyLeftCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GestureCommands\TiltBodyRightCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="KumandaKodlari.cs" />
+    <Compile Include="RoboManager.cs" />
+    <Compile Include="Viewers\ImageViewer.cs" />
+    <Compile Include="Viewers\JointMapping.cs" />
+    <Compile Include="Viewers\KinectAudioViewer.xaml.cs">
+      <DependentUpon>KinectAudioViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Viewers\KinectColorViewer.xaml.cs">
+      <DependentUpon>KinectColorViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Viewers\KinectDepthViewer.xaml.cs">
+      <DependentUpon>KinectDepthViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Viewers\KinectDiagnosticViewer.xaml.cs">
+      <DependentUpon>KinectDiagnosticViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Viewers\KinectSensorChooser.xaml.cs">
+      <DependentUpon>KinectSensorChooser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Viewers\KinectSettings.xaml.cs">
+      <DependentUpon>KinectSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Viewers\KinectSkeleton.cs" />
+    <Compile Include="Viewers\KinectSkeletonViewer.xaml.cs">
+      <DependentUpon>KinectSkeletonViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="VoiceCommands\DanceCommand.cs" />
+    <Compile Include="VoiceCommands\DoNotFollowMeCommand.cs" />
+    <Compile Include="VoiceCommands\FollowMeCommand.cs" />
+    <Compile Include="VoiceCommands\PowerDownCommand.cs" />
+    <Compile Include="VoiceCommands\ResetCommand.cs" />
+    <Compile Include="VoiceCommands\SleepCommand.cs" />
+    <Compile Include="VoiceCommands\StepBackCommand.cs" />
+    <Compile Include="VoiceCommands\StepForwardCommand.cs" />
+    <Compile Include="VoiceCommands\StepLeftCommand.cs" />
+    <Compile Include="VoiceCommands\StepRightCommand.cs" />
+    <Compile Include="VoiceCommands\StopCommand.cs" />
+    <Compile Include="VoiceCommands\VoiceCommandBase.cs" />
+    <Compile Include="VoiceCommands\WakeUpCommand.cs" />
+    <Compile Include="VoiceCommands\WalkBackCommand.cs" />
+    <Compile Include="VoiceCommands\WalkForwardCommand.cs" />
+    <Compile Include="VoiceCommands\WalkLeftCommand.cs" />
+    <Compile Include="VoiceCommands\WalkRightCommand.cs" />
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Viewers\KinectAudioViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Viewers\KinectColorViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Viewers\KinectDepthViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Viewers\KinectDiagnosticViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Viewers\KinectSensorChooser.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Viewers\KinectSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Viewers\KinectSkeletonViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UsbUirtManagedWrapper\UsbUirtManagedWrapper.csproj">
+      <Project>{3375BCA8-6372-40D4-86A9-AFB4E9F93766}</Project>
+      <Name>UsbUirtManagedWrapper</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Microphone.png" />
+    <Resource Include="Images\MicrophoneBad.png" />
+    <Resource Include="Images\Person.png" />
+    <Resource Include="Images\robosapien.png" />
+    <Resource Include="robosapien_Images\Layer 1.png" />
+    <Resource Include="robosapien_Images\Left Arm.png" />
+    <Resource Include="robosapien_Images\Left ForeArm.png" />
+    <Resource Include="robosapien_Images\Right Arm.png" />
+    <Resource Include="robosapien_Images\Right ForeArm.png" />
+    <Resource Include="robosapien_Images\Upper Body.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

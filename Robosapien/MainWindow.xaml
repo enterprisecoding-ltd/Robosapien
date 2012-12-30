@@ -1,0 +1,110 @@
+﻿<Window
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:Com.Enterprisecoding.Robosapien" mc:Ignorable="d"
+	x:Class="Com.Enterprisecoding.Robosapien.MainWindow"
+	x:Name="Window"
+	Title="MainWindow"
+	Width="869" Height="580">
+	<Window.Resources>
+		<Style x:Key="HandDownButtonStyle" TargetType="{x:Type Button}">
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Button}">
+						<Grid>
+							<Image x:Name="PART_Image" Source="Images/HandDown.png" Margin="0" d:LayoutOverrides="Width">
+								<Image.Effect>
+									<DropShadowEffect BlurRadius="5" Color="#FF000000" Direction="-60" Opacity="0.3" ShadowDepth="5"/>
+								</Image.Effect>
+							</Image>
+						</Grid>
+						<ControlTemplate.Triggers>
+							<MultiTrigger>
+							 	<MultiTrigger.Conditions>
+							 		<Condition Property="IsMouseOver" Value="True" />
+									<Condition Property="IsPressed" Value="False" />
+								</MultiTrigger.Conditions>
+								<Setter Property="Effect">
+									<Setter.Value>
+										<DropShadowEffect BlurRadius="10" Color="White" Direction="0" Opacity="0.6" RenderingBias="Performance" ShadowDepth="0" />
+									</Setter.Value>
+								</Setter>
+							</MultiTrigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</Window.Resources>
+
+	<Grid x:Name="LayoutRoot">
+		<Canvas x:Name="RoboSapienv1" ClipToBounds="True" HorizontalAlignment="Left" Height="542" UseLayoutRounding="False" VerticalAlignment="Top" Width="853">
+			<Image Height="558" Source="Images/Background.jpg" Stretch="Fill" Width="900" Canvas.Left="-20" RenderTransformOrigin="0.5,0.5">
+				<Image.RenderTransform>
+					<TransformGroup>
+						<ScaleTransform ScaleY="-1"/>
+						<SkewTransform/>
+						<RotateTransform/>
+						<TranslateTransform/>
+					</TransformGroup>
+				</Image.RenderTransform>
+			</Image>
+			<Canvas x:Name="Move" Height="228" Canvas.Left="219" Canvas.Top="267" Width="424">
+				<Image x:Name="MoveBackground" Height="214" Canvas.Left="4" Source="Images/MoveBackground.png" Canvas.Top="3" Width="410">
+					<Image.Effect>
+						<DropShadowEffect BlurRadius="5" Color="#FF000000" Direction="-60" Opacity="0.3" ShadowDepth="5"/>
+					</Image.Effect>
+				</Image>
+				<local:ImageButton x:Name="MoveWalkLeft" Canvas.Left="348" Canvas.Top="91" Image="Images/MoveWalkLeft.png" Width="43" Height="29" RenderTransformOrigin="-13.001,3.107" Click="MoveWalkLeft_Click"/>
+				<local:ImageButton x:Name="MoveWalkRight" Canvas.Left="30" Canvas.Top="89" Image="Images/MoveWalkRight.png" Width="43" Height="33" RenderTransformOrigin="-13.001,3.107" Click="MoveWalkRight_Click"/>
+				<local:ImageButton x:Name="MoveWalkForward" Canvas.Left="185" Canvas.Top="171" Image="Images/MoveWalkForward.png" Width="49" Height="41" RenderTransformOrigin="-13.001,3.107" Click="MoveWalkForward_Click"/>
+				<local:ImageButton x:Name="MoveWalkBack" Canvas.Left="184" Canvas.Top="9" Image="Images/MoveWalkBack.png" Width="51" Height="40" RenderTransformOrigin="-13.001,3.107" Click="MoveWalkBack_Click"/>
+				<local:ImageButton x:Name="MoveStop" Canvas.Left="129" Canvas.Top="68" Image="Images/MoveStop.png" Width="163" Height="75" RenderTransformOrigin="-13.001,3.107" Click="MoveStop_Click"/>
+				<local:ImageButton x:Name="MoveStepForward" Canvas.Left="162" Canvas.Top="139" Image="Images/MoveStepForward.png" Width="95" Height="47" RenderTransformOrigin="-13.001,3.107" Click="MoveStepForward_Click"/>
+				<local:ImageButton x:Name="MoveStepBack" Canvas.Left="167" Canvas.Top="35" Width="85" Height="34" RenderTransformOrigin="-13.001,3.107" Image="Images/MoveStepBack.png" Click="MoveStepBack_Click"/>
+				<local:ImageButton x:Name="MoveStepRight" Canvas.Left="53" Canvas.Top="76" Width="83" Height="58" RenderTransformOrigin="-13.001,3.107" Image="Images/MoveStepRight.png" Click="MoveStepRight_Click"/>
+				<local:ImageButton x:Name="MoveStepLeft" Canvas.Left="282" Canvas.Top="76" Width="83" Height="58" RenderTransformOrigin="-13.001,3.107" Image="Images/MoveStepLeft.png" Click="MoveStepLeft_Click"/>
+			</Canvas>
+			<local:ImageButton x:Name="LeanLeft" Canvas.Left="418" Canvas.Top="71" Image="Images/LeanLeft.png" Width="201" Height="109" RenderTransformOrigin="-13.001,3.107" Click="LeanLeft_Click" BlurColor="Black"/>
+			<local:ImageButton x:Name="LeanRight" Canvas.Left="240" Canvas.Top="73" Image="Images/LeanRight.png" Width="191" Height="105" RenderTransformOrigin="-13.001,3.107" Click="LeanRight_Click" BlurColor="Black"/>
+			<local:ImageButton x:Name="LeanBack" Canvas.Left="407" Canvas.Top="57" Image="Images/LeanBack.png" Width="40" Height="63" RenderTransformOrigin="-13.001,3.107" Click="LeanBack_Click" BlurColor="Black"/>
+			<Canvas x:Name="LeftController" Height="253" Canvas.Left="613" Canvas.Top="44" Width="246">
+				<Image x:Name="ControllerBackground" Height="239" Canvas.Left="4" Source="Images\ControllerBackground.png" Canvas.Top="3" Width="232">
+					<Image.Effect>
+						<DropShadowEffect BlurRadius="5" Color="#FF000000" Direction="-60" Opacity="0.3" ShadowDepth="5"/>
+					</Image.Effect>
+				</Image>
+				<local:ImageButton x:Name="LeftArmAllOut" Canvas.Left="178" Canvas.Top="44" Image="Images/HandAllOut.png" Width="52" Height="52" RenderTransformOrigin="-13.001,3.107" Click="LeftArmAllOut_Click"/>
+				<local:ImageButton x:Name="LeftArmAllIn" Canvas.Left="16" Canvas.Top="43" Image="Images/HandAllIn.png" Width="52" Height="53" RenderTransformOrigin="-13.001,3.107" Click="LeftArmAllIn_Click"/>
+				<local:ImageButton x:Name="LeftArmIn" Canvas.Left="10" Canvas.Top="75" Image="Images/HandIn.png" Width="129" Height="101" RenderTransformOrigin="-13.001,3.107" Click="LeftArmIn_Click"/>
+				<local:ImageButton x:Name="LeftArmOut" Canvas.Left="106" Canvas.Top="76" Image="Images/HandOut.png" Width="130" Height="101" RenderTransformOrigin="-13.001,3.107" Click="LeftArmOut_Click"/>
+				<local:ImageButton x:Name="LeftArmAllUp" Canvas.Left="98" Canvas.Top="3" Image="Images/HandAllUp.png" Width="51" Height="53" RenderTransformOrigin="-13.001,3.107" Click="LeftArmAllUp_Click"/>
+				<local:ImageButton x:Name="LeftArmUp" Canvas.Left="88" Canvas.Top="32" Image="Images/HandUp.png" Width="71" Height="87" RenderTransformOrigin="-13.001,3.107" Click="LeftArmUp_Click" BlurColor="White"/>
+				<local:ImageButton x:Name="LeftArmDown" Canvas.Left="88" Canvas.Top="119" Image="Images/HandDown.png" Width="71" Height="91" RenderTransformOrigin="-13.001,3.107" Click="LeftArmDown_Click"/>
+				<local:ImageButton x:Name="LeftArmAllDown" Canvas.Left="98" Canvas.Top="187" Image="Images/HandAllDown.png" Width="51" Height="53" RenderTransformOrigin="-13.001,3.107" Click="LeftArmAllDown_Click"/>
+			</Canvas>
+			<local:TransparentImage x:Name="Robosapien" Height="284" Canvas.Left="290" Source="Images\Robosapien.png" Canvas.Top="95" Width="287">
+				<local:TransparentImage.Effect>
+					<DropShadowEffect BlurRadius="5" Color="#FF000000" Direction="-60" Opacity="0.3" ShadowDepth="5"/>
+				</local:TransparentImage.Effect>
+			</local:TransparentImage>
+			<local:ImageButton x:Name="LeanForward" Canvas.Left="409" Canvas.Top="153" Image="Images/LeanForward.png" Width="41" Height="57" RenderTransformOrigin="-13.001,3.107" Click="LeanForward_Click" BlurColor="Black"/>
+			<Canvas x:Name="RightController" Height="253" Canvas.Top="44" Width="246">
+				<Image x:Name="RightControllerBackground" Height="239" Canvas.Left="4" Source="Images/ControllerBackground.png" Canvas.Top="3" Width="232">
+					<Image.Effect>
+						<DropShadowEffect BlurRadius="5" Color="#FF000000" Direction="-60" Opacity="0.3" ShadowDepth="5"/>
+					</Image.Effect>
+				</Image>
+				<local:ImageButton x:Name="RightArmAllIn" Canvas.Left="178" Canvas.Top="46" Image="Images/HandAllOut.png" Width="52" Height="52" RenderTransformOrigin="-13.001,3.107" Click="RightArmAllIn_Click"/>
+				<local:ImageButton x:Name="RightArmAllOut" Canvas.Left="16" Canvas.Top="43" Image="Images/HandAllIn.png" Width="52" Height="53" RenderTransformOrigin="-13.001,3.107" Click="RightArmAllOut_Click"/>
+				<local:ImageButton x:Name="RightArmOut" Canvas.Left="10" Canvas.Top="75" Image="Images/HandIn.png" Width="129" Height="101" RenderTransformOrigin="-13.001,3.107" Click="RightArmOut_Click"/>
+				<local:ImageButton x:Name="RightArmIn" Canvas.Left="106" Canvas.Top="76" Image="Images/HandOut.png" Width="130" Height="101" RenderTransformOrigin="-13.001,3.107" Click="RightArmIn_Click"/>
+				<local:ImageButton x:Name="RightArmAllUp" Canvas.Left="98" Canvas.Top="3" Image="Images/HandAllUp.png" Width="51" Height="53" RenderTransformOrigin="-13.001,3.107" Click="RightArmAllUp_Click"/>
+				<local:ImageButton x:Name="RightArmUp" Canvas.Left="88" Canvas.Top="32" Image="Images/HandUp.png" Width="71" Height="87" RenderTransformOrigin="-13.001,3.107" Click="RightArmUp_Click"/>
+				<local:ImageButton x:Name="RightArmDown" Canvas.Left="88" Canvas.Top="119" Image="Images/HandDown.png" Width="71" Height="91" RenderTransformOrigin="-13.001,3.107" Click="RightArmDown_Click"/>
+				<local:ImageButton x:Name="RightArmAllDown" Canvas.Left="98" Canvas.Top="187" Image="Images/HandAllDown.png" Width="51" Height="53" RenderTransformOrigin="-13.001,3.107" Click="RightArmAllDown_Click"/>
+			</Canvas>
+			<local:ImageButton x:Name="Power" Height="48" Canvas.Left="797" Canvas.Top="486" Width="48" Image="Images/Power.png" Click="Power_Click"/>
+		</Canvas>
+	</Grid>
+</Window>

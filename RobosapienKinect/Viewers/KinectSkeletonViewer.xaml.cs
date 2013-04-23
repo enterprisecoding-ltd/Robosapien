@@ -4,25 +4,19 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace Com.Enterprisecoding.RobosapienKinect.Viewers
-{
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Media;
-    using System.Windows.Shapes;
-    using Microsoft.Kinect;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows;
+using Microsoft.Kinect;
 
-    public enum ImageType
-    {
+namespace Com.Enterprisecoding.RobosapienKinect.Viewers {
+    public enum ImageType {
         Color,
         Depth,
     }
 
-    internal enum TrackingMode
-    {
+    internal enum TrackingMode {
         DefaultSystemTracking,
         Closest1Player,
         Closest2Player,
@@ -33,23 +27,21 @@ namespace Com.Enterprisecoding.RobosapienKinect.Viewers
     }
 
     /// <summary>
-    /// Interaction logic for KinectSkeletonViewer.xaml
+    ///     Interaction logic for KinectSkeletonViewer.xaml
     /// </summary>
-    public partial class KinectSkeletonViewer : ImageViewer, INotifyPropertyChanged
-    {
+    public partial class KinectSkeletonViewer : ImageViewer, INotifyPropertyChanged {
         private const float ActivityFalloff = 0.98f;
-        private readonly List<ActivityWatcher> recentActivity = new List<ActivityWatcher>();
         private readonly List<int> activeList = new List<int>();
+        private readonly List<Dictionary<JointType, JointMapping>> jointMappings = new List<Dictionary<JointType, JointMapping>>();
+        private readonly List<ActivityWatcher> recentActivity = new List<ActivityWatcher>();
         private List<KinectSkeleton> skeletonCanvases;
-        private List<Dictionary<JointType, JointMapping>> jointMappings = new List<Dictionary<JointType, JointMapping>>();
         private Skeleton[] skeletonData;
 
-        public KinectSkeletonViewer()
-        {
+        public KinectSkeletonViewer() {
             InitializeComponent();
-            this.ShowJoints = true;
-            this.ShowBones = true;
-            this.ShowCenter = true;
+            ShowJoints = true;
+            ShowBones = true;
+            ShowCenter = true;
         }
 
         public bool ShowBones { get; set; }
@@ -62,186 +54,157 @@ namespace Com.Enterprisecoding.RobosapienKinect.Viewers
 
         internal TrackingMode TrackingMode { get; set; }
 
-        public void HideAllSkeletons()
-        {
-            if (this.skeletonCanvases != null)
-            {
-                foreach (KinectSkeleton skeletonCanvas in this.skeletonCanvases)
-                {
+        public void HideAllSkeletons() {
+            if (skeletonCanvases != null) {
+                foreach (KinectSkeleton skeletonCanvas in skeletonCanvases) {
                     skeletonCanvas.Reset();
                 }
             }
         }
 
-        protected override void OnKinectChanged(KinectSensor oldKinectSensor, KinectSensor newKinectSensor)
-        {
-            if (oldKinectSensor != null)
-            {
-                oldKinectSensor.AllFramesReady -= this.KinectAllFramesReady;
-                this.HideAllSkeletons();
+        protected override void OnKinectChanged(KinectSensor oldKinectSensor, KinectSensor newKinectSensor) {
+            if (oldKinectSensor != null) {
+                oldKinectSensor.AllFramesReady -= KinectAllFramesReady;
+                HideAllSkeletons();
             }
 
-            if (newKinectSensor != null && newKinectSensor.Status == KinectStatus.Connected)
-            {
-                newKinectSensor.AllFramesReady += this.KinectAllFramesReady;
+            if (newKinectSensor != null && newKinectSensor.Status == KinectStatus.Connected) {
+                newKinectSensor.AllFramesReady += KinectAllFramesReady;
             }
         }
 
-        private void KinectAllFramesReady(object sender, AllFramesReadyEventArgs e)
-        {
+        private void KinectAllFramesReady(object sender, AllFramesReadyEventArgs e) {
             // Have we already been "shut down" by the user of this viewer, 
             // or has the SkeletonStream been disabled since this event was posted?
-            if ((this.Kinect == null) || !((KinectSensor)sender).SkeletonStream.IsEnabled)
-            {
+            if ((Kinect == null) || !((KinectSensor) sender).SkeletonStream.IsEnabled) {
                 return;
             }
 
             bool haveSkeletonData = false;
 
-            using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame())
-            {
-                if (skeletonFrame != null)
-                {
-                    if (this.skeletonCanvases == null)
-                    {
-                        this.CreateListOfSkeletonCanvases();
+            using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame()) {
+                if (skeletonFrame != null) {
+                    if (skeletonCanvases == null) {
+                        CreateListOfSkeletonCanvases();
                     }
 
-                    if ((this.skeletonData == null) || (this.skeletonData.Length != skeletonFrame.SkeletonArrayLength))
-                    {
-                        this.skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
+                    if ((skeletonData == null) || (skeletonData.Length != skeletonFrame.SkeletonArrayLength)) {
+                        skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
                     }
 
-                    skeletonFrame.CopySkeletonDataTo(this.skeletonData);
+                    skeletonFrame.CopySkeletonDataTo(skeletonData);
 
                     haveSkeletonData = true;
                 }
             }
 
-            if (haveSkeletonData)
-            {
-                using (DepthImageFrame depthImageFrame = e.OpenDepthImageFrame())
-                {
-                    if (depthImageFrame != null)
-                    {
+            if (haveSkeletonData) {
+                using (DepthImageFrame depthImageFrame = e.OpenDepthImageFrame()) {
+                    if (depthImageFrame != null) {
                         int trackedSkeletons = 0;
 
-                        foreach (Skeleton skeleton in this.skeletonData)
-                        {
-                            Dictionary<JointType, JointMapping> jointMapping = this.jointMappings[trackedSkeletons];
+                        foreach (Skeleton skeleton in skeletonData) {
+                            Dictionary<JointType, JointMapping> jointMapping = jointMappings[trackedSkeletons];
                             jointMapping.Clear();
 
-                            KinectSkeleton skeletonCanvas = this.skeletonCanvases[trackedSkeletons++];
-                            skeletonCanvas.ShowBones = this.ShowBones;
-                            skeletonCanvas.ShowJoints = this.ShowJoints;
-                            skeletonCanvas.ShowCenter = this.ShowCenter;
+                            KinectSkeleton skeletonCanvas = skeletonCanvases[trackedSkeletons++];
+                            skeletonCanvas.ShowBones = ShowBones;
+                            skeletonCanvas.ShowJoints = ShowJoints;
+                            skeletonCanvas.ShowCenter = ShowCenter;
 
                             // Transform the data into the correct space
                             // For each joint, we determine the exact X/Y coordinates for the target view
-                            foreach (Joint joint in skeleton.Joints)
-                            {
-                                Point mappedPoint = this.GetPosition2DLocation(depthImageFrame, joint.Position);
-                                jointMapping[joint.JointType] = new JointMapping
-                                    {
-                                        Joint = joint, 
-                                        MappedPoint = mappedPoint
-                                    };
+                            foreach (Joint joint in skeleton.Joints) {
+                                Point mappedPoint = GetPosition2DLocation(depthImageFrame, joint.Position);
+                                jointMapping[joint.JointType] = new JointMapping {
+                                    Joint = joint,
+                                    MappedPoint = mappedPoint
+                                };
                             }
 
                             // Look up the center point
-                            Point centerPoint = this.GetPosition2DLocation(depthImageFrame, skeleton.Position);
+                            Point centerPoint = GetPosition2DLocation(depthImageFrame, skeleton.Position);
 
                             // Scale the skeleton thickness
                             // 1.0 is the desired size at 640 width
-                            double scale = this.RenderSize.Width / 640;
+                            double scale = RenderSize.Width/640;
 
                             skeletonCanvas.RefreshSkeleton(skeleton, jointMapping, centerPoint, scale);
                         }
 
-                        if (ImageType == ImageType.Depth)
-                        {
-                            this.ChooseTrackedSkeletons(this.skeletonData);
+                        if (ImageType == ImageType.Depth) {
+                            ChooseTrackedSkeletons(skeletonData);
                         }
                     }
                 }
             }
         }
 
-        private Point GetPosition2DLocation(DepthImageFrame depthFrame, SkeletonPoint skeletonPoint)
-        {
-            DepthImagePoint depthPoint = depthFrame.MapFromSkeletonPoint(skeletonPoint);
+        private Point GetPosition2DLocation(DepthImageFrame depthFrame, SkeletonPoint skeletonPoint) {
+            DepthImagePoint depthPoint = Kinect.CoordinateMapper.MapSkeletonPointToDepthPoint(skeletonPoint, Kinect.DepthStream.Format);
 
-            switch (ImageType)
-            {
+            switch (ImageType) {
                 case ImageType.Color:
-                    ColorImagePoint colorPoint = depthFrame.MapToColorImagePoint(depthPoint.X, depthPoint.Y, this.Kinect.ColorStream.Format);
+                    ColorImagePoint colorPoint = Kinect.CoordinateMapper.MapDepthPointToColorPoint(Kinect.DepthStream.Format, depthPoint, Kinect.ColorStream.Format);
 
                     // map back to skeleton.Width & skeleton.Height
                     return new Point(
-                        (int)(this.RenderSize.Width * colorPoint.X / this.Kinect.ColorStream.FrameWidth),
-                        (int)(this.RenderSize.Height * colorPoint.Y / this.Kinect.ColorStream.FrameHeight));
+                        (int) (RenderSize.Width*colorPoint.X/Kinect.ColorStream.FrameWidth),
+                        (int) (RenderSize.Height*colorPoint.Y/Kinect.ColorStream.FrameHeight));
                 case ImageType.Depth:
                     return new Point(
-                        (int)(this.RenderSize.Width * depthPoint.X / depthFrame.Width),
-                        (int)(this.RenderSize.Height * depthPoint.Y / depthFrame.Height));
+                        (int) (RenderSize.Width*depthPoint.X/depthFrame.Width),
+                        (int) (RenderSize.Height*depthPoint.Y/depthFrame.Height));
                 default:
                     throw new ArgumentOutOfRangeException("ImageType was a not expected value: " + ImageType.ToString());
             }
         }
 
-        private void CreateListOfSkeletonCanvases()
-        {
-            this.skeletonCanvases = new List<KinectSkeleton>
-                {
-                    this.skeletonCanvas1,
-                    this.skeletonCanvas2,
-                    this.skeletonCanvas3,
-                    this.skeletonCanvas4,
-                    this.skeletonCanvas5,
-                    this.skeletonCanvas6
-                };
+        private void CreateListOfSkeletonCanvases() {
+            skeletonCanvases = new List<KinectSkeleton> {
+                skeletonCanvas1,
+                skeletonCanvas2,
+                skeletonCanvas3,
+                skeletonCanvas4,
+                skeletonCanvas5,
+                skeletonCanvas6
+            };
 
-            this.skeletonCanvases.ForEach(s => this.jointMappings.Add(new Dictionary<JointType, JointMapping>()));
+            skeletonCanvases.ForEach(s => jointMappings.Add(new Dictionary<JointType, JointMapping>()));
         }
 
         // NOTE: The ChooseTrackedSkeletons part of the KinectSkeletonViewer would be useful
         // separate from the SkeletonViewer.
-        private void ChooseTrackedSkeletons(IEnumerable<Skeleton> skeletonDataValue)
-        {
-            switch (TrackingMode)
-            {
+        private void ChooseTrackedSkeletons(IEnumerable<Skeleton> skeletonDataValue) {
+            switch (TrackingMode) {
                 case TrackingMode.Closest1Player:
-                    this.ChooseClosestSkeletons(skeletonDataValue, 1);
+                    ChooseClosestSkeletons(skeletonDataValue, 1);
                     break;
                 case TrackingMode.Closest2Player:
-                    this.ChooseClosestSkeletons(skeletonDataValue, 2);
+                    ChooseClosestSkeletons(skeletonDataValue, 2);
                     break;
                 case TrackingMode.Sticky1Player:
-                    this.ChooseOldestSkeletons(skeletonDataValue, 1);
+                    ChooseOldestSkeletons(skeletonDataValue, 1);
                     break;
                 case TrackingMode.Sticky2Player:
-                    this.ChooseOldestSkeletons(skeletonDataValue, 2);
+                    ChooseOldestSkeletons(skeletonDataValue, 2);
                     break;
                 case TrackingMode.MostActive1Player:
-                    this.ChooseMostActiveSkeletons(skeletonDataValue, 1);
+                    ChooseMostActiveSkeletons(skeletonDataValue, 1);
                     break;
                 case TrackingMode.MostActive2Player:
-                    this.ChooseMostActiveSkeletons(skeletonDataValue, 2);
+                    ChooseMostActiveSkeletons(skeletonDataValue, 2);
                     break;
             }
         }
 
-        private void ChooseClosestSkeletons(IEnumerable<Skeleton> skeletonDataValue, int count)
-        {
-            SortedList<float, int> depthSorted = new SortedList<float, int>();
+        private void ChooseClosestSkeletons(IEnumerable<Skeleton> skeletonDataValue, int count) {
+            var depthSorted = new SortedList<float, int>();
 
-            foreach (Skeleton s in skeletonDataValue)
-            {
-                if (s.TrackingState != SkeletonTrackingState.NotTracked)
-                {
+            foreach (Skeleton s in skeletonDataValue) {
+                if (s.TrackingState != SkeletonTrackingState.NotTracked) {
                     float valueZ = s.Position.Z;
-                    while (depthSorted.ContainsKey(valueZ))
-                    {
+                    while (depthSorted.ContainsKey(valueZ)) {
                         valueZ += 0.0001f;
                     }
 
@@ -249,141 +212,120 @@ namespace Com.Enterprisecoding.RobosapienKinect.Viewers
                 }
             }
 
-            this.ChooseSkeletonsFromList(depthSorted.Values, count);
+            ChooseSkeletonsFromList(depthSorted.Values, count);
         }
 
-        private void ChooseOldestSkeletons(IEnumerable<Skeleton> skeletonDataValue, int count)
-        {
-            List<int> newList = new List<int>();
-            
-            foreach (Skeleton s in skeletonDataValue)
-            {
-                if (s.TrackingState != SkeletonTrackingState.NotTracked)
-                {
+        private void ChooseOldestSkeletons(IEnumerable<Skeleton> skeletonDataValue, int count) {
+            var newList = new List<int>();
+
+            foreach (Skeleton s in skeletonDataValue) {
+                if (s.TrackingState != SkeletonTrackingState.NotTracked) {
                     newList.Add(s.TrackingId);
                 }
             }
 
             // Remove all elements from the active list that are not currently present
-            this.activeList.RemoveAll(k => !newList.Contains(k));
+            activeList.RemoveAll(k => !newList.Contains(k));
 
             // Add all elements that aren't already in the activeList
-            this.activeList.AddRange(newList.FindAll(k => !this.activeList.Contains(k)));
+            activeList.AddRange(newList.FindAll(k => !activeList.Contains(k)));
 
-            this.ChooseSkeletonsFromList(this.activeList, count);
+            ChooseSkeletonsFromList(activeList, count);
         }
 
-        private void ChooseMostActiveSkeletons(IEnumerable<Skeleton> skeletonDataValue, int count)
-        {
-            foreach (ActivityWatcher watcher in this.recentActivity)
-            {
+        private void ChooseMostActiveSkeletons(IEnumerable<Skeleton> skeletonDataValue, int count) {
+            foreach (ActivityWatcher watcher in recentActivity) {
                 watcher.NewPass();
             }
 
-            foreach (Skeleton s in skeletonDataValue)
-            {
-                if (s.TrackingState != SkeletonTrackingState.NotTracked)
-                {
-                    ActivityWatcher watcher = this.recentActivity.Find(w => w.TrackingId == s.TrackingId);
-                    if (watcher != null)
-                    {
+            foreach (Skeleton s in skeletonDataValue) {
+                if (s.TrackingState != SkeletonTrackingState.NotTracked) {
+                    ActivityWatcher watcher = recentActivity.Find(w => w.TrackingId == s.TrackingId);
+                    if (watcher != null) {
                         watcher.Update(s);
                     }
-                    else
-                    {
-                        this.recentActivity.Add(new ActivityWatcher(s));
+                    else {
+                        recentActivity.Add(new ActivityWatcher(s));
                     }
                 }
             }
 
             // Remove any skeletons that are gone
-            this.recentActivity.RemoveAll(aw => !aw.Updated);
+            recentActivity.RemoveAll(aw => !aw.Updated);
 
-            this.recentActivity.Sort();
-            this.ChooseSkeletonsFromList(this.recentActivity.ConvertAll(f => f.TrackingId), count);
+            recentActivity.Sort();
+            ChooseSkeletonsFromList(recentActivity.ConvertAll(f => f.TrackingId), count);
         }
 
-        private void ChooseSkeletonsFromList(IList<int> list, int max)
-        {
-            if (this.Kinect.SkeletonStream.IsEnabled)
-            {
+        private void ChooseSkeletonsFromList(IList<int> list, int max) {
+            if (Kinect.SkeletonStream.IsEnabled) {
                 int argCount = Math.Min(list.Count, max);
 
-                if (argCount == 0)
-                {
-                    this.Kinect.SkeletonStream.ChooseSkeletons();
+                if (argCount == 0) {
+                    Kinect.SkeletonStream.ChooseSkeletons();
                 }
 
-                if (argCount == 1)
-                {
-                    this.Kinect.SkeletonStream.ChooseSkeletons(list[0]);
+                if (argCount == 1) {
+                    Kinect.SkeletonStream.ChooseSkeletons(list[0]);
                 }
 
-                if (argCount >= 2)
-                {
-                    this.Kinect.SkeletonStream.ChooseSkeletons(list[0], list[1]);
+                if (argCount >= 2) {
+                    Kinect.SkeletonStream.ChooseSkeletons(list[0], list[1]);
                 }
             }
         }
 
-        private class ActivityWatcher : IComparable<ActivityWatcher>
-        {
+        private class ActivityWatcher : IComparable<ActivityWatcher> {
             private float activityLevel;
-            private SkeletonPoint previousPosition;
             private SkeletonPoint previousDelta;
+            private SkeletonPoint previousPosition;
 
-            internal ActivityWatcher(Skeleton s)
-            {
-                this.activityLevel = 0.0f;
-                this.TrackingId = s.TrackingId;
-                this.Updated = true;
-                this.previousPosition = s.Position;
-                this.previousDelta = new SkeletonPoint();
+            internal ActivityWatcher(Skeleton s) {
+                activityLevel = 0.0f;
+                TrackingId = s.TrackingId;
+                Updated = true;
+                previousPosition = s.Position;
+                previousDelta = new SkeletonPoint();
             }
 
             internal int TrackingId { get; private set; }
 
             internal bool Updated { get; private set; }
 
-            public int CompareTo(ActivityWatcher other)
-            {
+            public int CompareTo(ActivityWatcher other) {
                 // Use the existing CompareTo on float, but reverse the arguments,
                 // since we wish to have larger activityLevels sort ahead of smaller values.
-                return other.activityLevel.CompareTo(this.activityLevel);
+                return other.activityLevel.CompareTo(activityLevel);
             }
 
-            internal void NewPass()
-            {
-                this.Updated = false;
+            internal void NewPass() {
+                Updated = false;
             }
 
-            internal void Update(Skeleton s)
-            {
+            internal void Update(Skeleton s) {
                 SkeletonPoint newPosition = s.Position;
-                SkeletonPoint newDelta = new SkeletonPoint
-                    {
-                        X = newPosition.X - this.previousPosition.X,
-                        Y = newPosition.Y - this.previousPosition.Y,
-                        Z = newPosition.Z - this.previousPosition.Z
-                    };
+                var newDelta = new SkeletonPoint {
+                    X = newPosition.X - previousPosition.X,
+                    Y = newPosition.Y - previousPosition.Y,
+                    Z = newPosition.Z - previousPosition.Z
+                };
 
-                SkeletonPoint deltaV = new SkeletonPoint
-                    {
-                        X = newDelta.X - this.previousDelta.X,
-                        Y = newDelta.Y - this.previousDelta.Y,
-                        Z = newDelta.Z - this.previousDelta.Z
-                    };
+                var deltaV = new SkeletonPoint {
+                    X = newDelta.X - previousDelta.X,
+                    Y = newDelta.Y - previousDelta.Y,
+                    Z = newDelta.Z - previousDelta.Z
+                };
 
-                this.previousPosition = newPosition;
-                this.previousDelta = newDelta;
+                previousPosition = newPosition;
+                previousDelta = newDelta;
 
-                float deltaVLengthSquared = (deltaV.X * deltaV.X) + (deltaV.Y * deltaV.Y) + (deltaV.Z * deltaV.Z);
-                float deltaVLength = (float)Math.Sqrt(deltaVLengthSquared);
+                float deltaVLengthSquared = (deltaV.X*deltaV.X) + (deltaV.Y*deltaV.Y) + (deltaV.Z*deltaV.Z);
+                var deltaVLength = (float) Math.Sqrt(deltaVLengthSquared);
 
-                this.activityLevel = this.activityLevel * ActivityFalloff;
-                this.activityLevel += deltaVLength;
+                activityLevel = activityLevel*ActivityFalloff;
+                activityLevel += deltaVLength;
 
-                this.Updated = true;
+                Updated = true;
             }
         }
     }

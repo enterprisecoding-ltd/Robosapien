@@ -1,112 +1,77 @@
 using System;
 using System.Runtime.InteropServices;
-using System.Threading;
 
-namespace UsbUirt
-{
-	/// <summary>
-	/// Summary description for LearnState.
-	/// </summary>
-	internal class LearnState : IDisposable
-	{
-		private uint _forcedFrequency = 0;
-		private bool _disposed = false;
-		private object _userState;
-		private CodeFormat _codeFormat;
-		private LearnCodeModifier _learnCodeFormat;
-		private  IntPtr _abort;
+namespace UsbUirt {
+    /// <summary>
+    ///     Summary description for LearnState.
+    /// </summary>
+    internal class LearnState : IDisposable {
+        private readonly CodeFormat _codeFormat;
+        private readonly uint _forcedFrequency;
+        private readonly LearnCodeModifier _learnCodeFormat;
+        private readonly object _userState;
+        private IntPtr _abort;
+        private bool _disposed;
 
-		internal LearnState(CodeFormat codeFormat, LearnCodeModifier learnCodeFormat, 
-			uint forcedFrequency, object userState)
-		{
-			_codeFormat = codeFormat;
-			_learnCodeFormat = learnCodeFormat;
-			_forcedFrequency = forcedFrequency;
-			_userState = userState;
-			_abort = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Int32)));
-			Marshal.WriteInt32(_abort, 0);
-		}
+        internal LearnState(CodeFormat codeFormat, LearnCodeModifier learnCodeFormat,
+                            uint forcedFrequency, object userState) {
+            _codeFormat = codeFormat;
+            _learnCodeFormat = learnCodeFormat;
+            _forcedFrequency = forcedFrequency;
+            _userState = userState;
+            _abort = Marshal.AllocHGlobal(Marshal.SizeOf(typeof (Int32)));
+            Marshal.WriteInt32(_abort, 0);
+        }
 
-		internal CodeFormat CodeFormat
-		{
-			get 
-			{
-				return _codeFormat; 
-			} 
-		}
+        internal CodeFormat CodeFormat {
+            get { return _codeFormat; }
+        }
 
-		internal LearnCodeModifier LearnCodeModifier 
-		{
-			get
-			{
-				return _learnCodeFormat;
-			}
-		}
+        internal LearnCodeModifier LearnCodeModifier {
+            get { return _learnCodeFormat; }
+        }
 
-		internal uint ForcedFrequency
-		{
-			get
-			{
-				return _forcedFrequency;
-			}
-		}
+        internal uint ForcedFrequency {
+            get { return _forcedFrequency; }
+        }
 
-		internal object UserState
-		{
-			get 
-			{
-				return _userState; 
-			} 
-		}
+        internal object UserState {
+            get { return _userState; }
+        }
 
-		internal IntPtr AbortFlag 
-		{
-			get
-			{
-				return _abort;
-			}
-		}
+        internal IntPtr AbortFlag {
+            get { return _abort; }
+        }
 
-		internal bool WasAborted 
-		{
-			get 
-			{
-				return Marshal.ReadInt32(_abort) != 0;
-			}
-		}
+        internal bool WasAborted {
+            get { return Marshal.ReadInt32(_abort) != 0; }
+        }
 
-		internal void Abort() 
-		{
-			Marshal.WriteInt32(_abort, 1);
-		}
+        internal void Abort() {
+            Marshal.WriteInt32(_abort, 1);
+        }
 
-		#region IDisposable Members
+        #region IDisposable Members
 
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+        public void Dispose() {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
-		private void Dispose(bool disposing)
-		{
-			if(!this._disposed)
-			{
-				if(disposing)
-				{
-					// Dispose any managed resources.
-				}
-             
-				if (IntPtr.Zero != _abort) 
-				{
-					Marshal.FreeHGlobal(_abort);
-					_abort = IntPtr.Zero;
-				}
+        private void Dispose(bool disposing) {
+            if (!_disposed) {
+                if (disposing) {
+                    // Dispose any managed resources.
+                }
 
-			}
-			_disposed = true;         
-		}
-		#endregion
+                if (IntPtr.Zero != _abort) {
+                    Marshal.FreeHGlobal(_abort);
+                    _abort = IntPtr.Zero;
+                }
+            }
+            _disposed = true;
+        }
 
-	}
+        #endregion
+    }
 }

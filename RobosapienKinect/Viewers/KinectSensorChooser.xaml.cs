@@ -4,66 +4,62 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace Com.Enterprisecoding.RobosapienKinect.Viewers
-{
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Data;
-    using System.Windows.Documents;
-    using System.Windows.Media.Animation;
-    using System.Windows.Navigation;
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Media.Animation;
+using System.Windows.Navigation;
+using Microsoft.Kinect;
 
-    using Microsoft.Kinect;
-
+namespace Com.Enterprisecoding.RobosapienKinect.Viewers {
     /// <summary>
-    /// Interaction logic for KinectSensorChooser.xaml
+    ///     Interaction logic for KinectSensorChooser.xaml
     /// </summary>
-    public partial class KinectSensorChooser : UserControl
-    {
+    public partial class KinectSensorChooser : UserControl {
         public static readonly DependencyProperty KinectProperty =
-            DependencyProperty.Register("Kinect", typeof(KinectSensor), typeof(KinectSensorChooser), new UIPropertyMetadata(null, new PropertyChangedCallback(KinectPropertyChanged)));
+            DependencyProperty.Register("Kinect", typeof (KinectSensor), typeof (KinectSensorChooser), new UIPropertyMetadata(null, KinectPropertyChanged));
 
         public static readonly DependencyProperty MessageProperty =
-            DependencyProperty.Register("Message", typeof(string), typeof(KinectSensorChooser), new UIPropertyMetadata(null));
+            DependencyProperty.Register("Message", typeof (string), typeof (KinectSensorChooser), new UIPropertyMetadata(null));
 
         public static readonly DependencyProperty MoreInfoProperty =
-            DependencyProperty.Register("MoreInfo", typeof(string), typeof(KinectSensorChooser), new UIPropertyMetadata(null));
+            DependencyProperty.Register("MoreInfo", typeof (string), typeof (KinectSensorChooser), new UIPropertyMetadata(null));
 
         public static readonly DependencyProperty MoreInfoUriProperty =
-            DependencyProperty.Register("MoreInfoUri", typeof(Uri), typeof(KinectSensorChooser), new UIPropertyMetadata(null));
+            DependencyProperty.Register("MoreInfoUri", typeof (Uri), typeof (KinectSensorChooser), new UIPropertyMetadata(null));
 
         public static readonly DependencyProperty ShowRetryProperty =
-            DependencyProperty.Register("ShowRetry", typeof(bool), typeof(KinectSensorChooser), new UIPropertyMetadata(false));
+            DependencyProperty.Register("ShowRetry", typeof (bool), typeof (KinectSensorChooser), new UIPropertyMetadata(false));
 
         public static readonly RoutedEvent KinectSensorChangedEvent = EventManager.RegisterRoutedEvent(
-            "KinectSensorChanged", RoutingStrategy.Bubble, typeof(DependencyPropertyChangedEventHandler), typeof(ImageViewer));
+            "KinectSensorChanged", RoutingStrategy.Bubble, typeof (DependencyPropertyChangedEventHandler), typeof (ImageViewer));
 
         private bool sensorConflict;
 
-        public KinectSensorChooser()
-        {
+        public KinectSensorChooser() {
             InitializeComponent();
-            this.Loaded += this.KinectSensorChooserLoaded;
+            Loaded += KinectSensorChooserLoaded;
 
-            this.IsRequired = true;
+            IsRequired = true;
 
             // Setup bindings via code
-            Binding binding = new Binding("Message") { Source = this };
+            var binding = new Binding("Message") {Source = this};
             MessageTextBlock.SetBinding(TextBlock.TextProperty, binding);
-            Binding binding2 = new Binding("MoreInfo") { Source = this };
-            TellMeMoreLink.SetBinding(TextBlock.ToolTipProperty, binding2);
-            Binding binding3 = new Binding("MoreInfo") { Source = this, Converter = new NullToVisibilityConverter() };
-            TellMeMore.SetBinding(TextBlock.VisibilityProperty, binding3);
-            Binding binding4 = new Binding("ShowRetry") { Source = this, Converter = new BoolToVisibilityConverter() };
-            RetryButton.SetBinding(Button.VisibilityProperty, binding4);
-            Binding binding5 = new Binding("MoreInfoUri") { Source = this };
+            var binding2 = new Binding("MoreInfo") {Source = this};
+            TellMeMoreLink.SetBinding(ToolTipProperty, binding2);
+            var binding3 = new Binding("MoreInfo") {Source = this, Converter = new NullToVisibilityConverter()};
+            TellMeMore.SetBinding(VisibilityProperty, binding3);
+            var binding4 = new Binding("ShowRetry") {Source = this, Converter = new BoolToVisibilityConverter()};
+            RetryButton.SetBinding(VisibilityProperty, binding4);
+            var binding5 = new Binding("MoreInfoUri") {Source = this};
             TellMeMoreLink.SetBinding(Hyperlink.NavigateUriProperty, binding5);
 
-            this.UpdateMessage(
+            UpdateMessage(
                 KinectStatus.Undefined,
                 "Required",
                 "This application needs a Kinect for Windows sensor in order to function. Please plug one into the PC.",
@@ -71,144 +67,118 @@ namespace Com.Enterprisecoding.RobosapienKinect.Viewers
                 false);
         }
 
-        public event DependencyPropertyChangedEventHandler KinectSensorChanged;
-
         public bool IsRequired { get; set; }
 
-        public KinectSensor Kinect
-        {
-            get { return (KinectSensor)GetValue(KinectProperty); }
+        public KinectSensor Kinect {
+            get { return (KinectSensor) GetValue(KinectProperty); }
             set { SetValue(KinectProperty, value); }
         }
 
-        public string Message
-        {
-            get { return (string)GetValue(MessageProperty); }
+        public string Message {
+            get { return (string) GetValue(MessageProperty); }
             set { SetValue(MessageProperty, value); }
         }
 
-        public string MoreInfo
-        {
-            get { return (string)GetValue(MoreInfoProperty); }
+        public string MoreInfo {
+            get { return (string) GetValue(MoreInfoProperty); }
             set { SetValue(MoreInfoProperty, value); }
         }
 
-        public Uri MoreInfoUri
-        {
-            get { return (Uri)GetValue(MoreInfoUriProperty); }
+        public Uri MoreInfoUri {
+            get { return (Uri) GetValue(MoreInfoUriProperty); }
             set { SetValue(MoreInfoUriProperty, value); }
         }
 
-        public bool ShowRetry
-        {
-            get { return (bool)GetValue(ShowRetryProperty); }
+        public bool ShowRetry {
+            get { return (bool) GetValue(ShowRetryProperty); }
             set { SetValue(ShowRetryProperty, value); }
         }
 
-        public void AppConflictOccurred()
-        {
-            if (this.Kinect != null)
-            {
-                this.sensorConflict = true;
+        public event DependencyPropertyChangedEventHandler KinectSensorChanged;
+
+        public void AppConflictOccurred() {
+            if (Kinect != null) {
+                sensorConflict = true;
 
                 // sensorConflict is considered when handling status updates,
                 // so we call UpdateStatus with the current Status to ensure that the
                 // logic takes the sensorConflict into account.
-                this.UpdateStatus(this.Kinect.Status);
+                UpdateStatus(Kinect.Status);
             }
         }
 
-        private static void KinectPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs args)
-        {
-            KinectSensorChooser sensorChooser = (KinectSensorChooser)d;
-            if (sensorChooser.KinectSensorChanged != null)
-            {
+        private static void KinectPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs args) {
+            var sensorChooser = (KinectSensorChooser) d;
+            if (sensorChooser.KinectSensorChanged != null) {
                 sensorChooser.KinectSensorChanged(sensorChooser, args);
             }
         }
 
-        private void KinectSensorChooserLoaded(object sender, RoutedEventArgs e)
-        {
-            KinectSensor.KinectSensors.StatusChanged += this.KinectSensorsStatusChanged;
-            this.DiscoverSensor();
+        private void KinectSensorChooserLoaded(object sender, RoutedEventArgs e) {
+            KinectSensor.KinectSensors.StatusChanged += KinectSensorsStatusChanged;
+            DiscoverSensor();
         }
 
-        private void DiscoverSensor()
-        {
+        private void DiscoverSensor() {
             // When this control is running in a designer, it should not discover a KinectSensor
-            if (!DesignerProperties.GetIsInDesignMode(this))
-            {
+            if (!DesignerProperties.GetIsInDesignMode(this)) {
                 // Find first sensor that is connected.
-                foreach (KinectSensor sensor in KinectSensor.KinectSensors)
-                {
-                    if (sensor.Status == KinectStatus.Connected)
-                    {
-                        this.UpdateStatus(sensor.Status);
-                        this.Kinect = sensor;
+                foreach (KinectSensor sensor in KinectSensor.KinectSensors) {
+                    if (sensor.Status == KinectStatus.Connected) {
+                        UpdateStatus(sensor.Status);
+                        Kinect = sensor;
                         break;
                     }
                 }
 
                 // If we didn't find a connected Sensor
-                if (this.Kinect == null)
-                {
+                if (Kinect == null) {
                     // NOTE: this doesn't handle the multiple Kinect sensor case very well.
-                    foreach (KinectSensor sensor in KinectSensor.KinectSensors)
-                    {
-                        this.UpdateStatus(sensor.Status);
+                    foreach (KinectSensor sensor in KinectSensor.KinectSensors) {
+                        UpdateStatus(sensor.Status);
                     }
                 }
             }
         }
 
-        private void KinectSensorsStatusChanged(object sender, StatusChangedEventArgs e)
-        {
-            var status = e.Status;
-            if (this.Kinect == null)
-            {
-                this.UpdateStatus(status);
-                if (e.Status == KinectStatus.Connected)
-                {
-                    this.Kinect = e.Sensor;
+        private void KinectSensorsStatusChanged(object sender, StatusChangedEventArgs e) {
+            KinectStatus status = e.Status;
+            if (Kinect == null) {
+                UpdateStatus(status);
+                if (e.Status == KinectStatus.Connected) {
+                    Kinect = e.Sensor;
                 }
             }
-            else
-            {
-                if (this.Kinect == e.Sensor)
-                {
-                    this.UpdateStatus(status);
+            else {
+                if (Kinect == e.Sensor) {
+                    UpdateStatus(status);
                     if (e.Status == KinectStatus.Disconnected ||
-                        e.Status == KinectStatus.NotPowered)
-                    {
-                        this.Kinect = null;
-                        this.sensorConflict = false;
-                        this.DiscoverSensor();
+                        e.Status == KinectStatus.NotPowered) {
+                        Kinect = null;
+                        sensorConflict = false;
+                        DiscoverSensor();
                     }
                 }
             }
         }
 
-        private void UpdateStatus(KinectStatus status)
-        {
+        private void UpdateStatus(KinectStatus status) {
             string message = null;
             string moreInfo = null;
             Uri moreInfoUri = null;
             bool showRetry = false;
 
-            switch (status)
-            {
+            switch (status) {
                 case KinectStatus.Connected:
                     // If there's a sensor conflict, we wish to display all of the normal 
                     // states and statuses, with the exception of Connected.
-                    if (this.sensorConflict)
-                    {
+                    if (sensorConflict) {
                         message = "This Kinect is being used by another application.";
                         moreInfo = "This application needs a Kinect for Windows sensor in order to function. However, another application is using the Kinect Sensor.";
                         moreInfoUri = new Uri("http://go.microsoft.com/fwlink/?LinkID=239812");
                         showRetry = true;
                     }
-                    else
-                    {
+                    else {
                         message = "All set!";
                         moreInfo = null;
                         moreInfoUri = null;
@@ -228,14 +198,12 @@ namespace Com.Enterprisecoding.RobosapienKinect.Viewers
 
                     break;
                 case KinectStatus.Disconnected:
-                    if (this.IsRequired)
-                    {
+                    if (IsRequired) {
                         message = "Required";
                         moreInfo = "This application needs a Kinect for Windows sensor in order to function. Please plug one into the PC.";
                         moreInfoUri = new Uri("http://go.microsoft.com/fwlink/?LinkID=239815");
                     }
-                    else
-                    {
+                    else {
                         message = "Get the full experience by plugging in a Kinect for Windows sensor.";
                         moreInfo = "This application will use a Kinect for Windows sensor if one is plugged into the PC.";
                         moreInfoUri = new Uri("http://go.microsoft.com/fwlink/?LinkID=239816");
@@ -265,60 +233,52 @@ namespace Com.Enterprisecoding.RobosapienKinect.Viewers
                     break;
             }
 
-            this.UpdateMessage(status, message, moreInfo, moreInfoUri, showRetry);
+            UpdateMessage(status, message, moreInfo, moreInfoUri, showRetry);
         }
 
-        private void UpdateMessage(KinectStatus status, string message, string moreInfo, Uri moreInfoUri, bool showRetry)
-        {
-            this.Message = message;
-            this.MoreInfo = moreInfo;
-            this.MoreInfoUri = moreInfoUri;
-            this.ShowRetry = showRetry;
+        private void UpdateMessage(KinectStatus status, string message, string moreInfo, Uri moreInfoUri, bool showRetry) {
+            Message = message;
+            MoreInfo = moreInfo;
+            MoreInfoUri = moreInfoUri;
+            ShowRetry = showRetry;
 
-            if ((status == KinectStatus.Connected) && !this.sensorConflict)
-            {
+            if ((status == KinectStatus.Connected) && !sensorConflict) {
                 var fadeAnimation = new DoubleAnimation(0, new Duration(TimeSpan.FromMilliseconds(500)));
 
-                fadeAnimation.Completed += (sender, args) =>
-                {
+                fadeAnimation.Completed += (sender, args) => {
                     // If we've reached the end of the animation and achieved total transparency, 
                     // the chooser should no longer be clickable - hide it.
-                    if (this.Opacity == 0)
-                    {
-                        this.Visibility = Visibility.Hidden;
+                    if (Opacity == 0) {
+                        Visibility = Visibility.Hidden;
                     }
                 };
 
-                this.BeginAnimation(UserControl.OpacityProperty, fadeAnimation, HandoffBehavior.SnapshotAndReplace);
+                BeginAnimation(OpacityProperty, fadeAnimation, HandoffBehavior.SnapshotAndReplace);
             }
-            else
-            {
+            else {
                 // The chooser is heading towards opaque - as long as it's not completely transparent, 
                 // it should be Visible and clickable.
-                this.Visibility = Visibility.Visible;
+                Visibility = Visibility.Visible;
 
                 var fadeAnimation = new DoubleAnimation(1.0, new Duration(TimeSpan.FromMilliseconds(500)));
-                this.BeginAnimation(UserControl.OpacityProperty, fadeAnimation, HandoffBehavior.SnapshotAndReplace);
+                BeginAnimation(OpacityProperty, fadeAnimation, HandoffBehavior.SnapshotAndReplace);
             }
         }
 
-        private void RetryButtonClick(object sender, RoutedEventArgs e)
-        {
-            this.sensorConflict = false;
-            var sensorToRetry = this.Kinect;
+        private void RetryButtonClick(object sender, RoutedEventArgs e) {
+            sensorConflict = false;
+            KinectSensor sensorToRetry = Kinect;
 
             // Necessary to null the Kinect value first. Otherwise, no property change will be detected.
-            this.Kinect = null;
-            this.Kinect = sensorToRetry;
+            Kinect = null;
+            Kinect = sensorToRetry;
 
-            this.UpdateStatus(KinectStatus.Connected);
+            UpdateStatus(KinectStatus.Connected);
         }
 
-        private void TellMeMoreLinkRequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-            Hyperlink hyperlink = e.OriginalSource as Hyperlink;
-            if (hyperlink != null)
-            {
+        private void TellMeMoreLinkRequestNavigate(object sender, RequestNavigateEventArgs e) {
+            var hyperlink = e.OriginalSource as Hyperlink;
+            if (hyperlink != null) {
                 // Careful - ensure that this NavigateUri comes from a trusted source, as in this sample, before launching a process using it.
                 Process.Start(new ProcessStartInfo(hyperlink.NavigateUri.ToString()));
             }
@@ -327,30 +287,24 @@ namespace Com.Enterprisecoding.RobosapienKinect.Viewers
         }
     }
 
-    public class NullToVisibilityConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
+    public class NullToVisibilityConverter : IValueConverter {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             bool isVisible = value != null;
             return isVisible ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
             throw new NotImplementedException();
         }
     }
 
-    public class BoolToVisibilityConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            bool isVisible = (bool)value;
+    public class BoolToVisibilityConverter : IValueConverter {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+            var isVisible = (bool) value;
             return isVisible ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
             throw new NotImplementedException();
         }
     }

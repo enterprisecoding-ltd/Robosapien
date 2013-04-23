@@ -1,5 +1,4 @@
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Security;
 
 //
@@ -7,6 +6,7 @@ using System.Security;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
+
 [assembly: AssemblyTitle("UsbUirtManagedWrapper")]
 [assembly: AssemblyDescription("Managed wrapper around the USB-UIRT driver")]
 [assembly: AssemblyConfiguration("")]
@@ -14,8 +14,8 @@ using System.Security;
 [assembly: AssemblyProduct("")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]		
-[assembly: AllowPartiallyTrustedCallers()]
+[assembly: AssemblyCulture("")]
+[assembly: AllowPartiallyTrustedCallers]
 
 //
 // Version information for an assembly consists of the following four values:
@@ -55,6 +55,7 @@ using System.Security;
 //   (*) Delay Signing is an advanced option - see the Microsoft .NET Framework
 //       documentation for more information on this.
 //
+
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
 [assembly: AssemblyKeyName("")]

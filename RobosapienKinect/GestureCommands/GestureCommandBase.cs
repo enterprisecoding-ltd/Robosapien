@@ -1,11 +1,10 @@
-﻿using Microsoft.Kinect;
+﻿using System;
 using System.Windows.Media.Media3D;
-using UsbUirt;
-using System;
+using Microsoft.Kinect;
 
 namespace Com.Enterprisecoding.RobosapienKinect.GestureCommands {
     internal abstract class GestureCommandBase {
-        private const double RADIAN2DEGREE= 180.0 / Math.PI;
+        private const double RADIAN2DEGREE = 180.0/Math.PI;
         private static readonly Vector3D normalVector = new Vector3D(0, 0, 1);
 
         protected readonly RoboManager RoboManagerInstance = RoboManager.Instance;
@@ -15,16 +14,15 @@ namespace Com.Enterprisecoding.RobosapienKinect.GestureCommands {
         public abstract void Execute();
 
         protected double GetAngle(Vector3D firstVector, Vector3D secondVector, Vector3D intersectionVector) {
-            
-            var b1 = intersectionVector - firstVector;
-            var b2 = intersectionVector - secondVector;
+            Vector3D b1 = intersectionVector - firstVector;
+            Vector3D b2 = intersectionVector - secondVector;
 
             b1.Normalize();
             b2.Normalize();
 
-            var dotProduct = Vector3D.DotProduct(b1, b2);
+            double dotProduct = Vector3D.DotProduct(b1, b2);
 
-            return (double)Math.Acos(dotProduct) * RADIAN2DEGREE; 
+            return Math.Acos(dotProduct)*RADIAN2DEGREE;
         }
     }
 }

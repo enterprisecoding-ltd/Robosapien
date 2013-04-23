@@ -1,9 +1,9 @@
 ﻿<UserControl x:Class="Com.Enterprisecoding.RobosapienKinect.Viewers.KinectDiagnosticViewer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:kt="clr-namespace:Com.Enterprisecoding.RobosapienKinect.Viewers"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" d:DesignHeight="1024" d:DesignWidth="800">
     <Grid Name="LayoutRoot" Background="Black" x:FieldModifier="public">
         <Grid.ColumnDefinitions>
@@ -19,24 +19,25 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <WrapPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2"
-                    Background="Black" TextBlock.Foreground="White"
-                    TextBlock.FontSize="14">
+                   Background="Black" TextBlock.Foreground="White"
+                   TextBlock.FontSize="14">
             <Expander Name="Settings" ExpandDirection="Down" Background="Black" HorizontalAlignment="Stretch">
                 <Expander.Header>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <Label Foreground="LightSteelBlue" Grid.Column="0">_KinectSensor</Label>
                         <TextBlock Name="status" Foreground="LightBlue"
-                            Text="{Binding Status}" VerticalAlignment="Center" 
-                            ToolTip="{Binding Sensor.UniqueKinectId}"  Grid.Column="1"/>
-                        <TextBlock DockPanel.Dock="Right" Foreground="LightSteelBlue" 
+                                   Text="{Binding Status}" VerticalAlignment="Center"
+                                   ToolTip="{Binding Sensor.UniqueKinectId}" Grid.Column="1" />
+                        <TextBlock DockPanel.Dock="Right" Foreground="LightSteelBlue"
                                    FontSize="10" Width="40" TextWrapping="Wrap"
-                                   Grid.Column="2" Margin="120,0,0,0"
-                                   >(click for settings)</TextBlock>
+                                   Grid.Column="2" Margin="120,0,0,0">
+                            (click for settings)
+                        </TextBlock>
 
                     </Grid>
                 </Expander.Header>
@@ -53,44 +54,46 @@
             <Viewbox Grid.Row="1">
                 <!-- Make the colorViewer and skeletonViewer overlap entirely. -->
                 <Grid>
-                    <kt:KinectColorViewer x:Name="colorViewer" CollectFrameRate="True"  />
+                    <kt:KinectColorViewer x:Name="colorViewer" CollectFrameRate="True" />
                     <Canvas>
                         <kt:KinectSkeletonViewer x:Name="KinectSkeletonViewerOnColor" x:FieldModifier="public"
-                                         Width="{Binding ElementName=colorViewer,Path=ActualWidth}"
-                                         Height="{Binding ElementName=colorViewer,Path=ActualHeight}"
-                                         ImageType="Color" />
+                                                 Width="{Binding ElementName=colorViewer,Path=ActualWidth}"
+                                                 Height="{Binding ElementName=colorViewer,Path=ActualHeight}"
+                                                 ImageType="Color" />
                     </Canvas>
                 </Grid>
             </Viewbox>
 
-            <StackPanel Orientation="Vertical" TextBlock.Foreground="White" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+            <StackPanel Orientation="Vertical" TextBlock.Foreground="White" Grid.Row="1" HorizontalAlignment="Left"
+                        VerticalAlignment="Bottom">
                 <TextBlock FontSize="24"
                            Text="{Binding ElementName=colorViewer,Path=FrameRate}" />
                 <TextBlock FontSize="14">FPS</TextBlock>
             </StackPanel>
         </Grid>
-        <kt:KinectAudioViewer x:Name="kinectAudioViewer"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+        <kt:KinectAudioViewer x:Name="kinectAudioViewer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                               Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" />
 
         <Grid Grid.Column="2" Grid.Row="0" Name="depthPanel" x:FieldModifier="public">
             <Grid Grid.Row="4" MaxHeight="480" MaxWidth="640">
-                <Viewbox >
+                <Viewbox>
                     <!-- Make the depthViewer and skeletonViewer overlap entirely. -->
                     <Grid>
                         <kt:KinectDepthViewer x:Name="KinectDepthViewer" x:FieldModifier="public"
-                                  CollectFrameRate="True" />
+                                              CollectFrameRate="True" />
                         <Canvas>
                             <kt:KinectSkeletonViewer x:Name="KinectSkeletonViewerOnDepth" x:FieldModifier="public"
-                                         Width="{Binding ElementName=KinectDepthViewer,Path=ActualWidth}"
-                                         Height="{Binding ElementName=KinectDepthViewer,Path=ActualHeight}"
-                                         ShowBones="true" ShowJoints="true" ShowCenter="true" ImageType="Depth" />
+                                                     Width="{Binding ElementName=KinectDepthViewer,Path=ActualWidth}"
+                                                     Height="{Binding ElementName=KinectDepthViewer,Path=ActualHeight}"
+                                                     ShowBones="true" ShowJoints="true" ShowCenter="true"
+                                                     ImageType="Depth" />
                         </Canvas>
                     </Grid>
                 </Viewbox>
-                <StackPanel Orientation="Vertical" TextBlock.Foreground="White" 
+                <StackPanel Orientation="Vertical" TextBlock.Foreground="White"
                             HorizontalAlignment="Left" VerticalAlignment="Bottom">
                     <TextBlock FontSize="24"
-                           Text="{Binding ElementName=KinectDepthViewer,Path=FrameRate}" />
+                               Text="{Binding ElementName=KinectDepthViewer,Path=FrameRate}" />
                     <TextBlock FontSize="14">FPS</TextBlock>
                 </StackPanel>
             </Grid>

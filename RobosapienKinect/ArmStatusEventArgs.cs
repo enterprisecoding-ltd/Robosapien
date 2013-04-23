@@ -7,7 +7,7 @@ namespace Com.Enterprisecoding.RobosapienKinect {
 
         public ArmStatusEventArgs(ArmStatus oldStatus, ArmStatus newStatus) {
             OldStatus = oldStatus;
-            NewStatus = newStatus;            
+            NewStatus = newStatus;
         }
     }
 }

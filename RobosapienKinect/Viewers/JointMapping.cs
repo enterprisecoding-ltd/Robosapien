@@ -4,23 +4,21 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace Com.Enterprisecoding.RobosapienKinect.Viewers
-{
-    using System.Windows;
-    using Microsoft.Kinect;
+using System.Windows;
+using Microsoft.Kinect;
 
+namespace Com.Enterprisecoding.RobosapienKinect.Viewers {
     /// <summary>
-    /// This class is used to map points between skeleton and color/depth
+    ///     This class is used to map points between skeleton and color/depth
     /// </summary>
-    public class JointMapping
-    {
+    public class JointMapping {
         /// <summary>
-        /// This is the joint we are looking at
+        ///     This is the joint we are looking at
         /// </summary>
         public Joint Joint { get; set; }
 
         /// <summary>
-        /// This is the point mapped into the target displays
+        ///     This is the point mapped into the target displays
         /// </summary>
         public Point MappedPoint { get; set; }
     }

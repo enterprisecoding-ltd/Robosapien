@@ -1,5 +1,4 @@
-﻿
-namespace Com.Enterprisecoding.RobosapienKinect.GestureCommands {
+﻿namespace Com.Enterprisecoding.RobosapienKinect.GestureCommands {
     internal class Angles {
         public const int ARM_IN = 8;
         public const int ARM_OUT = 12;
